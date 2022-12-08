@@ -1,0 +1,101 @@
+version: "3"
+services:
+  # ----------------- #
+  # Apache Kafka      #
+  # ----------------- #    
+  zookeeper:
+    image: 'bitnami/zookeeper:3.7'
+    container_name: 'zookeeper'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+     
+  kafka:
+    image: 'bitnami/kafka:3'
+    container_name: 'kafka'
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - auto.create.topics.enable=true
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+      - KAFKA_TOPICS="TopicA:1:1"
+    depends_on:
+      - zookeeper
+  # ----------------- #
+  # Apache Spark      #
+  # ----------------- #      
+  spark:
+    image: bitnami/spark:3
+    container_name: 'spark'
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    ports:
+      - '8080:8080'
+      - '7077:7077'
+      - '4040:4040'
+    volumes:
+        - ./Stream:/data  
+  spark-worker:
+    image: bitnami/spark:3
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark:7077
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_WORKER_CORES=1
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+        - ./Stream:/data 
+  # ----------------- #
+  #  Mongo DB        #
+  # ----------------- #  
+  mongo:
+    image: mongo
+    container_name: 'mongo'
+    ports:
+      - "27017:27017"
+    environment:
+       MONGO_INITDB_ROOT_USERNAME: root
+       MONGO_INITDB_ROOT_PASSWORD: pass   
+    volumes:
+      - ./database/db:/data/db
+     
+  mongo_admin:
+    image: mongo-express
+    container_name: 'mongoadmin'
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    ports:
+      - "8081:8081"    
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_URL=mongodb://root:pass@mongo:27017/?authSource=admin
+      - ME_CONFIG_BASICAUTH_USERNAME=mexpress
+      - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
+    
+  
+  app:
+    build: .
+    container_name: Generator 
+  
+  
+volumes:
+  zookeeper_data-1:
+    driver: local
+  kafka_data-1:
+    driver: local
+    
