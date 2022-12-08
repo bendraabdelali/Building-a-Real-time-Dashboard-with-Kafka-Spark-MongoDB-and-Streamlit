@@ -88,9 +88,9 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
     
   
-  app:
-    build: .
-    container_name: Generator 
+  # app:
+  #   build: .
+  #   container_name: Generator 
   
   
 volumes:
