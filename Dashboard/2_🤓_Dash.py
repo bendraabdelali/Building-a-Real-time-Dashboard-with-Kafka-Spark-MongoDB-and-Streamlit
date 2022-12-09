@@ -25,7 +25,6 @@ groupby_column = st.selectbox(
         ('country', 'gender', 'Product_name'),
     )
 
-
 items = get_data("CountryAmount")    
 if groupby_column == "Product_name":
     items = get_data("ProductAmount")
@@ -37,8 +36,6 @@ else :
 # Print results.
 df = pd.DataFrame(items)
 df = df.drop(['_id'], axis=1)
-
-
 
 # ---- MAINPAGE ----#
 
@@ -54,7 +51,6 @@ with right_column:
     st.subheader(f"{total_sales} $")
 
 st.markdown("""---""")
-
 
 # ---- SIDEBAR ----
 st.sidebar.header("Please Filter Here:")
@@ -82,12 +78,9 @@ fig = px.bar(
 # Pie Charts 
 fig1 = px.pie(df_selection, values="total_order_amount", names=groupby_column, title=f'<b>Sales & Profit by {groupby_column}</b>')
 
- 
 left_column, right_column = st.columns(2)
 left_column.plotly_chart(fig, use_container_width=True)
 right_column.plotly_chart(fig1, use_container_width=True)
-
-
 
 # ---- HIDE STREAMLIT STYLE ----
 hide_st_style = """
