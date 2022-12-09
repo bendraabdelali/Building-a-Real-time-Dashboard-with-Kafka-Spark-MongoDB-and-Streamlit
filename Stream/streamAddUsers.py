@@ -20,7 +20,8 @@ if __name__ == "__main__":
     message={}
     
     while True:
-            message["full_name"]= fake.name()
+            message["first_name"]= fake.name()
+            message["last_name"]= fake.name()
             message["Product_name"] = fake.company_suffix()
             message["country"] = fake.country()
             message["gender"]=np.random.choice(["M", "F"], p=[0.5, 0.5])

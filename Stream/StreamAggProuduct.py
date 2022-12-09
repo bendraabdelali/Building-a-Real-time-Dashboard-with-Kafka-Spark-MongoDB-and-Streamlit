@@ -26,11 +26,13 @@ if __name__ == "__main__":
         .selectExpr("CAST(value AS STRING)") 
 
     orders_schema = StructType() \
-        .add("full_name", StringType()) \
-        .add("gender", StringType()) \
+        .add("id", IntegerType())\
+        .add("first_name", StringType()) \
+        .add("last_name", StringType()) \
         .add("country", StringType()) \
         .add("Product_name", StringType()) \
-        .add("Qte", IntegerType()) 
+        .add("gender", StringType()) \
+        .add("quantity", IntegerType()) 
  
     orders_df1 = orders_df.selectExpr("CAST(value AS STRING)")
 
@@ -41,8 +43,8 @@ if __name__ == "__main__":
     orders_df3 = orders_df2.select("orders.*")
 
     analysis =  orders_df3.groupBy("Product_name")\
-                .agg({'Qte': 'sum'})\
-                .select("Product_name", col("sum(Qte)") \
+                .agg({'quantity': 'sum'})\
+                .select("Product_name", col("sum(quantity)") \
                 .alias("total_order_amount"))
                 
 
