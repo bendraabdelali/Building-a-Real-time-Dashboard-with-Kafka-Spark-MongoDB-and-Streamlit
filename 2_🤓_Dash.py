@@ -5,8 +5,7 @@ import pymongo
 
 st.set_page_config(page_title="Sales Dashboard", page_icon=":bar_chart:", layout="wide")
 # Initialize connection.
-# Uses st.experimental_singleton to only run once.
-@st.experimental_singleton
+
 def init_connection():
     return pymongo.MongoClient(**st.secrets["mongo"])
 
