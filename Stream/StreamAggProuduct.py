@@ -60,8 +60,7 @@ if __name__ == "__main__":
 
     print("Stream Data Processing Application Completed.")
 
-    # spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0,org.mongodb.spark:mongo-spark-connector:10.0.0 app.py
-
+    # 
 
 
     

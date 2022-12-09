@@ -2,3 +2,5 @@ venv
 env
 *\venv
 *\env
+
+database/*
