@@ -8,4 +8,24 @@ The data pipeline starts by setting up Kafka on the ecommerce website. Kafka wil
 
 The project will allow for real time analytics on the ecommerce website, allowing for more efficient decision making and better customer experience. The data pipeline will make it easier to understand user behavior and trends, which will be beneficial for the website.
 
+# Usage 
+- To use this project, execute the command provided in the run.sh file step by step. If everything checks out, visit  dashboard.
+# Results
+- Get the sales amount by country. 
+- <p align="center">
+  <img src="docs/Total_amount_country.png" />
+</p>
+- Get the sales amount by Product Name.
+- <p align="center">
+  <img src="docs/Total_Amount_Product_Name.png" />
+</p>
+- Get the sales amount by gender.
+- <p align="center">
+  <img src="docs/Total_Amount_Gender.png" />
+</p>
+
+## Authors
+- Bendra Abdelali
+- ELASERY Youssef
+
 
