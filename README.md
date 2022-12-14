@@ -12,14 +12,18 @@ The project will allow for real time analytics on the ecommerce website, allowin
 - To use this project, execute the command provided in the run.sh file step by step. If everything checks out, visit  dashboard.
 # Results
 - Get the sales amount by country. 
+
 - <p align="center">
   <img src="docs/Total_amount_country.png" />
 </p>
+
 - Get the sales amount by Product Name.
+
 - <p align="center">
   <img src="docs/Total_Amount_Product_Name.png" />
 </p>
 - Get the sales amount by gender.
+
 - <p align="center">
   <img src="docs/Total_Amount_Gender.png" />
 </p>
