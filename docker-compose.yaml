@@ -86,11 +86,6 @@ services:
       - ME_CONFIG_MONGODB_URL=mongodb://root:pass@mongo:27017/?authSource=admin
       - ME_CONFIG_BASICAUTH_USERNAME=mexpress
       - ME_CONFIG_BASICAUTH_PASSWORD=mexpress
-    
-  
-  # app:
-  #   build: .
-  #   container_name: Generator 
   
   
 volumes:
