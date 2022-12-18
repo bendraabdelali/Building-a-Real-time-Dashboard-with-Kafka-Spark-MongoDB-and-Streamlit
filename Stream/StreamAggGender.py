@@ -9,7 +9,7 @@ kafka_bootstrap_servers = 'kafka:9092'
 
 if __name__ == "__main__":
     print("Welcome !!!")
-    print("Stream Data Processing Application Started ...")
+    print("Stream Agg Gender..")
     spark = SparkSession \
         .builder \
         .appName("PySpark Structured Streaming with Kafka") \
@@ -36,15 +36,12 @@ if __name__ == "__main__":
         .add("gender", StringType()) \
         .add("quantity", IntegerType()) 
 
-    orders_df1 = orders_df.selectExpr("CAST(value AS STRING)")
-
-    orders_df2 = orders_df1\
+    orders_df1 = orders_df\
         .select(from_json(col("value"),orders_schema)\
-        .alias("orders"))      
+        .alias("orders"))\
+        .select("orders.*")
 
-    orders_df3 = orders_df2.select("orders.*")
-
-    analysis =  orders_df3.groupBy("gender")\
+    analysis =  orders_df1.groupBy("gender")\
                 .agg({'quantity': 'sum'})\
                 .select("gender", col("sum(quantity)") \
                 .alias("total_order_amount"))

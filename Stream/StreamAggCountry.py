@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-
 import time
 
 kafka_topic_name = "topicA"
@@ -9,14 +8,15 @@ kafka_bootstrap_servers = 'kafka:9092'
 
 if __name__ == "__main__":
     print("Welcome !!!")
-    print("Stream Data Processing Application Started ...")
+    print("Stream Agg Country ...")
     spark = SparkSession \
         .builder \
         .appName("PySpark Structured Streaming with Kafka") \
         .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector:10.0.0')\
         .config('spark.jars.packages', 'org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.0')\
-        .master("local[*]") \
+        .master("spark://spark:7077") \
         .getOrCreate()  
+
     # Construct a streaming DataFrame that reads from test-topic 
     orders_df = spark \
         .readStream \
@@ -36,14 +36,14 @@ if __name__ == "__main__":
         .add("gender", StringType()) \
         .add("quantity", IntegerType()) 
  
-    orders_df1 = orders_df.selectExpr("CAST(value AS STRING)")
+    
 
-    orders_df2 = orders_df1\
+    orders_df2 = orders_df\
         .select(from_json(col("value"),orders_schema)\
-        .alias("orders"))      
-    orders_df3 = orders_df2.select("orders.*")
+        .alias("orders"))\
+        .select("orders.*")
 
-    analysis =  orders_df3.groupBy("country")\
+    analysis =  orders_df2.groupBy("country")\
                 .agg({'quantity': 'sum'})\
                 .select("country", col("sum(quantity)") \
                 .alias("total_order_amount"))

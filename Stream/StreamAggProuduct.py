@@ -8,12 +8,12 @@ kafka_bootstrap_servers = 'kafka:9092'
 
 if __name__ == "__main__":
     print("Welcome !!!")
-    print("Stream Data Processing Application Started ...")
+    print("Stream Agg Product...")
     spark = SparkSession \
         .builder \
         .appName("PySpark Structured Streaming with Kafka") \
         .config('spark.jars.packages', 'org.mongodb.spark:mongo-spark-connector:10.0.0')\
-        .master("local[*]") \
+         .master("spark://spark:7077") \
         .getOrCreate()  
     # Construct a streaming DataFrame that reads from test-topic 
     orders_df = spark \
@@ -34,20 +34,16 @@ if __name__ == "__main__":
         .add("gender", StringType()) \
         .add("quantity", IntegerType()) 
  
-    orders_df1 = orders_df.selectExpr("CAST(value AS STRING)")
-
-    orders_df2 = orders_df1\
+    orders_df = orders_df\
         .select(from_json(col("value"),orders_schema)\
-        .alias("orders"))      
+        .alias("orders"))\
+        .select("orders.*")
 
-    orders_df3 = orders_df2.select("orders.*")
-
-    analysis =  orders_df3.groupBy("Product_name")\
+    analysis =  orders_df.groupBy("Product_name")\
                 .agg({'quantity': 'sum'})\
                 .select("Product_name", col("sum(quantity)") \
                 .alias("total_order_amount"))
                 
-
     analysis.writeStream\
         .format("mongodb")\
         .queryName("ToMDB")\
